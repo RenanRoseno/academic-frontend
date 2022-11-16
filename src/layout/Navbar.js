@@ -6,7 +6,7 @@ export default function Navbar() {
         <div>
           <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container-fluid">
-                <a className="navbar-brand" href='#'>Navbar</a>
+                <a className="navbar-brand" href='#'>ACADÊMICO</a>
               {/* <Link className="navbar-brand" to="/">
                 Full Stack Application
               </Link> */}

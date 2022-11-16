@@ -11,7 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 
 const columns = [
-  { field: "id", headerName: "#", width: 90 },
+  { field: "id", headerName: "#", width: 50 },
   {
     field: "name",
     headerName: "Nome",
@@ -50,6 +50,7 @@ const columns = [
 
 export default function Home() {
   const [professors, setProfessors]=useState([])
+  const [disable, setDisable] = useState(true);
 
   useEffect(() => {
     loadProfessors();
@@ -57,15 +58,17 @@ export default function Home() {
 
 
   const [checkboxSelection, setCheckboxSelection] = React.useState(true);
-  
-  let selectedParam = null
 
+  let selectedParam = null
+  const disableEdit = () => !!selectedParam;
   const onRowsSelectionHandler = (ids) => {
     const selectedRowsData = ids.map((id) => professors.find((row) => row.id === id));
-    if(selectedRowsData){
+    if(selectedRowsData.length > 0){
       selectedParam = selectedRowsData[0];
+      setDisable(false)
     } else {
       selectedParam = null;
+      setDisable(true)
     }
     
     console.log(selectedRowsData);
@@ -82,6 +85,7 @@ export default function Home() {
     return selectedParam ? params.row.id === selectedParam.id : true;
     
   }
+  
   
   const [show, setShow] = useState(false);
 
@@ -110,15 +114,15 @@ export default function Home() {
           // isRowSelectable={(params) => teste(params)}
         />
       </Box>
-      <div class="d-flex justify-content-end mt-5">
-     <div class="row ">
-     <div class="col-md-3 ml-md-auto">  <Button variant="btn btn-light" onClick={handleShow}>
+      <div className="d-flex justify-content-end mt-5">
+     <div className="row ">
+     <div className="col-md-3 ml-md-auto">  <Button variant="btn btn-light" onClick={handleShow}>
         <AddIcon />
       </Button></div>
-      <div class="col-md-3 ml-md-auto"><Button variant="btn btn-light" onClick={handleShow}>
+      <div className="col-md-3 ml-md-auto"><Button variant="btn btn-light" onClick={handleShow} disabled={disable}>
         <EditIcon />
       </Button></div>
-      <div class="col-md-3 ml-md-auto"><Button variant="btn btn-light" onClick={handleShow}>
+      <div className="col-md-3 ml-md-auto"><Button variant="btn btn-light" onClick={handleShow}>
         <DeleteForeverIcon />
       </Button></div>
       </div>

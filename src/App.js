@@ -2,16 +2,18 @@ import logo from "./logo.svg";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./layout/Navbar";
-import { Router } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 
 function App() {
   return (
     <div className="App">
-      {/* <Router> */}
+      <Router>
         <Navbar />
-        <Home />
-      {/* </Router> */}
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+        </Routes>
+      </Router>
 
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
