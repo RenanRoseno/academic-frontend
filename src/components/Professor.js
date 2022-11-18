@@ -7,6 +7,9 @@ import Modal from "react-bootstrap/Modal";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import CloseIcon from "@mui/icons-material/Close";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 
 const columns = [
   { field: "id", headerName: "#", width: 50 },
@@ -138,17 +141,51 @@ export default function Professor() {
       </Button> */}
       </div>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal
+        size="lg"
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        dialogClassName="modal-90w"
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Cadastrar/Editar Professor</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          {/* Woohoo, you're reading this text in a modal! */}
+          <form>
+            {/* <div className="form-row"> */}
+            <div className="row">
+              <div className="col-md-6">
+                <label for="inputEmail4">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="inputEmail4"
+                  placeholder="Email"
+                />
+              </div>
+              <div className=" col-md-6">
+                <label for="inputPassword4">Password</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="inputPassword4"
+                  placeholder="Password"
+                />
+              </div>
+            </div>
+            {/* </div> */}
+          </form>
+        </Modal.Body>
+
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
+          <Button variant="btn btn-light" onClick={handleClose}>
+            <CleaningServicesIcon />
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
+          <Button name="aaa" variant="btn btn-light" onClick={handleClose}>
+            <SaveIcon />
           </Button>
         </Modal.Footer>
       </Modal>
