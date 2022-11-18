@@ -1,0 +1,8 @@
+export const HOME = "/" 
+export const COURSES = "/courses" 
+export const DISCIPLINES = "/disciplines" 
+export const CURRICULUM_MATRICES = "/curriculum-matrices"
+export const PROFESSORS = "/professors" 
+export const CLASSES = "/classes" 
+export const SCORES = "/scores" 
+export const STUDENTS = "/students"
