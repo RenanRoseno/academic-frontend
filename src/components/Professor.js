@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-// import Button from '@mui/material/Button';
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import SaveIcon from "@mui/icons-material/Save";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -47,17 +45,16 @@ const columns = [
   // },
 ];
 
-export default function Home() {
+export default function Professor() {
   const [professors, setProfessors] = useState([]);
   const [disable, setDisable] = useState(true);
+  const [checkboxSelection, setCheckboxSelection] = React.useState(true);
+  let selectedParam = null;
 
   useEffect(() => {
     loadProfessors();
   }, []);
 
-  const [checkboxSelection, setCheckboxSelection] = React.useState(true);
-
-  let selectedParam = null;
   const disableEdit = () => !!selectedParam;
   const onRowsSelectionHandler = (ids) => {
     const selectedRowsData = ids.map((id) =>
@@ -79,6 +76,7 @@ export default function Home() {
     setProfessors(result.data);
     console.log(result.data);
   };
+
   const teste = (params) => {
     console.log(selectedParam);
     return selectedParam ? params.row.id === selectedParam.id : true;

@@ -3,7 +3,15 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./layout/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Professor";
+import Professor from "./components/Professor";
+import Home from "./layout/Home";
+import Course from "./components/Course";
+import Discipline from "./components/Discipline";
+import CurriculumMatrices from "./components/CurriculumMatrix";
+import Class from "./components/Class";
+import Score from "./components/Score";
+import * as routes from "./constants/routes";
+import Student from "./components/Student";
 
 function App() {
   return (
@@ -11,24 +19,20 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path={routes.HOME} element={<Home />} />
+          <Route exact path={routes.COURSES} element={<Course />} />
+          <Route exact path={routes.DISCIPLINES} element={<Discipline />} />
+          <Route
+            exact
+            path={routes.CURRICULUM_MATRICES}
+            element={<CurriculumMatrices />}
+          />
+          <Route exact path={routes.STUDENTS} element={<Student />} /> 
+          <Route exact path={routes.PROFESSORS} element={<Professor />} />
+          <Route exact path={routes.CLASSES} element={<Class />} />
+          <Route exact path={routes.SCORES} element={<Score />} />
         </Routes>
       </Router>
-
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
     </div>
   );
 }
