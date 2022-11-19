@@ -10,6 +10,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import "../App.css";
+import InputMask from "react-input-mask";
+import Form from "react-bootstrap/Form";
+import {showAlertSuccess, showAlertError} from "../layout/Alerts"
+import { ERROR, SUCCESS, SUCCESS_MESSAGE } from "../utils/messages";
 
 const columns = [
   { field: "id", headerName: "#", width: 50 },
@@ -50,8 +55,19 @@ const columns = [
 
 export default function Professor() {
   const [professors, setProfessors] = useState([]);
+  const [professor, setProfessor] = useState({
+    name: "",
+    email: "",
+    cpf: "",
+    register: "",
+    phone: "",
+  });
+
+  const { name, email, cpf, register, phone } = professor;
+  const [num, setNum] = useState("");
   const [disable, setDisable] = useState(true);
-  const [checkboxSelection, setCheckboxSelection] = React.useState(true);
+  const [checkboxSelection, setCheckboxSelection] = useState(true);
+
   let selectedParam = null;
 
   useEffect(() => {
@@ -90,6 +106,42 @@ export default function Professor() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const handleNumChange = (event) => {
+    const limit = 13;
+    setNum(event.target.value.slice(0, limit));
+  };
+
+  const onInputChange = (e) => {
+    setProfessor({ ...professor, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    professor.register = num;
+    console.log(professor);
+    await axios.post("http://localhost:8080/professors/", professor).then(function (response) {
+      handleClose();
+      loadProfessors();
+      showAlertSuccess(SUCCESS, SUCCESS_MESSAGE)
+    })
+    .catch(function (error) {
+      showAlertError(ERROR, error.response.data.message)
+    });
+
+  };
+
+  const clear = () => {
+    setProfessor({
+      name: "",
+      email: "",
+      cpf: "",
+      register: "",
+      phone: "",
+    });
+
+    setNum("")
+  };
+
   return (
     <div className="container mt-4">
       <Box sx={{ height: 400, width: "100%" }}>
@@ -108,13 +160,12 @@ export default function Professor() {
           checkboxSelection={checkboxSelection}
           experimentalFeatures={{ newEditingApi: true }}
           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-          // isRowSelectable={(params) => teste(params)}
+          isRowSelectable={(params) => teste(params)}
         />
       </Box>
       <div className="d-flex justify-content-end mt-5">
         <div className="row ">
           <div className="col-md-3 ml-md-auto">
-            {" "}
             <Button variant="btn btn-light" onClick={handleShow}>
               <AddIcon />
             </Button>
@@ -152,42 +203,94 @@ export default function Professor() {
         <Modal.Header closeButton>
           <Modal.Title>Cadastrar/Editar Professor</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {/* Woohoo, you're reading this text in a modal! */}
-          <form>
+        <form onSubmit={(e) => onSubmit(e)}>
+          <Modal.Body>
+            {/* Woohoo, you're reading this text in a modal! */}
+
             {/* <div className="form-row"> */}
-            <div className="row">
+            <div className="row form">
+              <div className="col-md-9">
+                <label htmlFor="name" className="required">
+                  Nome
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  required
+                  name="name"
+                  value={name}
+                  onChange={(e) => onInputChange(e)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="phone">Telefone</label>
+                <Form.Control
+                  as={InputMask}
+                  mask="(99) 99999 9999"
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => onInputChange(e)}
+                />
+              </div>
+
               <div className="col-md-6">
-                <label for="inputEmail4">Email</label>
+                <label htmlFor="inputEmail4" className="required">
+                  Email
+                </label>
                 <input
                   type="email"
                   className="form-control"
                   id="inputEmail4"
                   placeholder="Email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => onInputChange(e)}
+                  required
                 />
               </div>
-              <div className=" col-md-6">
-                <label for="inputPassword4">Password</label>
+              <div className="col-md-3">
+                <label htmlFor="phone" className="required">
+                  CPF
+                </label>
+                <Form.Control
+                  as={InputMask}
+                  mask="999.999.999-99"
+                  placeholder="Digite se CPF"
+                  name="cpf"
+                  value={cpf}
+                  onChange={(e) => onInputChange(e)}
+                  required
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="rg" className="required">
+                  RG
+                </label>
                 <input
-                  type="password"
+                  maxLength={9}
+                  type="number"
                   className="form-control"
-                  id="inputPassword4"
-                  placeholder="Password"
+                  onChange={handleNumChange}
+                  name="register"
+                  value={num}
+                  id="rg"
+                  required
                 />
               </div>
             </div>
             {/* </div> */}
-          </form>
-        </Modal.Body>
+          </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="btn btn-light" onClick={handleClose}>
-            <CleaningServicesIcon />
-          </Button>
-          <Button name="aaa" variant="btn btn-light" onClick={handleClose}>
-            <SaveIcon />
-          </Button>
-        </Modal.Footer>
+          <Modal.Footer>
+            <Button  variant="btn btn-light" onClick={clear}>
+              <CleaningServicesIcon />
+            </Button>
+            <Button type="submit" name="aaa" variant="btn btn-light">
+              <SaveIcon />
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     </div>
   );
