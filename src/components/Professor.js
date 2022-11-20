@@ -83,7 +83,10 @@ export default function Professor() {
 
   const handleClose = () => setShow(false);
 
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    clear();
+    setShow(true)
+  };
 
   const handleShowEdit = () => {
     handleShow();
