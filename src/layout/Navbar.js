@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import * as routes from "../constants/routes";
+import SchoolIcon from "@mui/icons-material/School";
 
 export default function Navbar() {
   return (
@@ -8,6 +9,7 @@ export default function Navbar() {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <Link className="navbar-brand mb-0 h1" to={routes.HOME}>
+            <SchoolIcon /> &nbsp;
             ACADÊMICO
           </Link>
           <button

@@ -8,7 +8,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
-import CloseIcon from "@mui/icons-material/Close";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import "../App.css";
 import InputMask from "react-input-mask";
@@ -17,7 +16,6 @@ import { showAlertSuccess, showAlertError } from "../layout/Alerts";
 import { ERROR, SUCCESS, SUCCESS_MESSAGE } from "../utils/messages";
 
 const columns = [
-  { field: "id", headerName: "#", width: 50 },
   {
     field: "name",
     headerName: "Nome",
@@ -32,7 +30,13 @@ const columns = [
   },
   {
     field: "register",
-    headerName: "Identificação",
+    headerName: "RG",
+    width: 250,
+    editable: true,
+  },
+  {
+    field: "cpf",
+    headerName: "CPF",
     width: 250,
     editable: true,
   },
@@ -42,15 +46,6 @@ const columns = [
     width: 200,
     editable: true,
   },
-  // {
-  //   field: "fullName",
-  //   headerName: "Full name",
-  //   description: "This column has a value getter and is not sortable.",
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (params) =>
-  //     `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  // },
 ];
 
 export default function Professor() {
@@ -66,14 +61,12 @@ export default function Professor() {
   const { name, email, cpf, register, phone } = professor;
   const [num, setNum] = useState("");
   const [disable, setDisable] = useState(true);
-
-  // let selectedProfessor = null;
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     loadProfessors();
   }, []);
 
-  const disableEdit = () => !!selectedProfessor;
   const onRowsSelectionHandler = (ids) => {
     const selectedRowsData = ids.map((id) =>
       professors.find((row) => row.id === id)
@@ -89,20 +82,15 @@ export default function Professor() {
     }
   };
 
-  const loadProfessors = async () => {
-    const result = await axios.get("http://localhost:8080/professors/");
-    setProfessors(result.data);
-    console.log(result.data);
-  };
-
-  const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
+
   const handleShow = () => setShow(true);
+
   const handleShowEdit = () => {
     handleShow();
     loadUser();
   };
+
   const handleNumChange = (event) => {
     const limit = 13;
     setNum(event.target.value.slice(0, limit));
@@ -112,33 +100,42 @@ export default function Professor() {
     setProfessor({ ...professor, [e.target.name]: e.target.value });
   };
 
+  const loadProfessors = async () => {
+    const result = await axios.get("http://localhost:8080/professors/");
+    setProfessors(result.data);
+    console.log(result.data);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     professor.register = num;
     console.log(professor);
-    if(selectedProfessor.id){
+    if (selectedProfessor.id) {
       await axios
-      .put(`http://localhost:8080/professors/${selectedProfessor.id}`, professor)
-      .then(function (response) {
-        handleClose();
-        loadProfessors();
-        showAlertSuccess(SUCCESS, SUCCESS_MESSAGE);
-      })
-      .catch(function (error) {
-        console.log(error)
-        showAlertError(ERROR, error.response.data.message);
-      });
+        .put(
+          `http://localhost:8080/professors/${selectedProfessor.id}`,
+          professor
+        )
+        .then(function (response) {
+          handleClose();
+          loadProfessors();
+          showAlertSuccess(SUCCESS, SUCCESS_MESSAGE);
+        })
+        .catch(function (error) {
+          console.log(error);
+          showAlertError(ERROR, error.response.data.message);
+        });
     } else {
       await axios
-      .post("http://localhost:8080/professors/", professor)
-      .then(function (response) {
-        handleClose();
-        loadProfessors();
-        showAlertSuccess(SUCCESS, SUCCESS_MESSAGE);
-      })
-      .catch(function (error) {
-        showAlertError(ERROR, error.response.data.message);
-      });
+        .post("http://localhost:8080/professors/", professor)
+        .then(function (response) {
+          handleClose();
+          loadProfessors();
+          showAlertSuccess(SUCCESS, SUCCESS_MESSAGE);
+        })
+        .catch(function (error) {
+          showAlertError(ERROR, error.response.data.message);
+        });
     }
   };
 
@@ -153,6 +150,7 @@ export default function Professor() {
         showAlertError(ERROR, error.response.data.message);
       });
   };
+
   const clear = () => {
     setProfessor({
       name: "",
@@ -161,7 +159,6 @@ export default function Professor() {
       register: "",
       phone: "",
     });
-
     setNum("");
   };
 
@@ -174,17 +171,10 @@ export default function Professor() {
     setNum(result.data.register);
   };
 
-  
   return (
     <div className="container mt-4">
       <Box sx={{ height: 550, width: "100%" }}>
         <h3>Gerenciamento de professores</h3>
-        {/* <Button
-        sx={{ mb: 2 }}
-        onClick={() => setCheckboxSelection(!checkboxSelection)}
-      >
-        Toggle checkbox selection
-      </Button> */}
         <DataGrid
           rows={professors}
           columns={columns}
@@ -212,16 +202,15 @@ export default function Professor() {
             </Button>
           </div>
           <div className="col-md-3 ml-md-auto">
-            <Button variant="btn btn-light" disabled={disable} onClick={()=> deleteProfessor(professor.id)}>
+            <Button
+              variant="btn btn-light"
+              disabled={disable}
+              onClick={() => deleteProfessor(professor.id)}
+            >
               <DeleteForeverIcon />
             </Button>
           </div>
         </div>
-
-        {/* &nbsp;
-      <Button variant="btn btn-light" onClick={handleShow}>
-        <SaveIcon />
-      </Button> */}
       </div>
 
       <Modal
@@ -233,13 +222,12 @@ export default function Professor() {
         dialogClassName="modal-90w"
       >
         <Modal.Header closeButton>
-          <Modal.Title>{selectedProfessor.id ? 'Editar' : 'Cadastrar'} Professor</Modal.Title>
+          <Modal.Title>
+            {selectedProfessor.id ? "Editar" : "Cadastrar"} Professor
+          </Modal.Title>
         </Modal.Header>
         <form onSubmit={(e) => onSubmit(e)}>
           <Modal.Body>
-            {/* Woohoo, you're reading this text in a modal! */}
-
-            {/* <div className="form-row"> */}
             <div className="row form">
               <div className="col-md-9">
                 <label htmlFor="name" className="required">
@@ -311,7 +299,6 @@ export default function Professor() {
                 />
               </div>
             </div>
-            {/* </div> */}
           </Modal.Body>
 
           <Modal.Footer>

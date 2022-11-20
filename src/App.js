@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./layout/Navbar";
@@ -27,12 +26,17 @@ function App() {
             path={routes.CURRICULUM_MATRICES}
             element={<CurriculumMatrices />}
           />
-          <Route exact path={routes.STUDENTS} element={<Student />} /> 
+          <Route exact path={routes.STUDENTS} element={<Student />} />
           <Route exact path={routes.PROFESSORS} element={<Professor />} />
           <Route exact path={routes.CLASSES} element={<Class />} />
           <Route exact path={routes.SCORES} element={<Score />} />
         </Routes>
       </Router>
+      <footer>
+        <div className="mt-5 align-text-bottom">
+          © 2022 Copyright: Renan Roseno    
+        </div>
+      </footer>
     </div>
   );
 }
