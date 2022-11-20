@@ -73,7 +73,6 @@ export default function Professor() {
     );
     if (selectedRowsData.length > 0) {
       setSelectedProfessor(selectedRowsData[0]);
-      console.log(selectedProfessor);
       setDisable(false);
     } else {
       setSelectedProfessor({});
@@ -103,13 +102,11 @@ export default function Professor() {
   const loadProfessors = async () => {
     const result = await axios.get("http://localhost:8080/professors/");
     setProfessors(result.data);
-    console.log(result.data);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     professor.register = num;
-    console.log(professor);
     if (selectedProfessor.id) {
       await axios
         .put(
@@ -122,7 +119,6 @@ export default function Professor() {
           showAlertSuccess(SUCCESS, SUCCESS_MESSAGE);
         })
         .catch(function (error) {
-          console.log(error);
           showAlertError(ERROR, error.response.data.message);
         });
     } else {
@@ -163,7 +159,6 @@ export default function Professor() {
   };
 
   const loadUser = async () => {
-    console.log(selectedProfessor);
     const result = await axios.get(
       `http://localhost:8080/professors/${selectedProfessor.id}`
     );
