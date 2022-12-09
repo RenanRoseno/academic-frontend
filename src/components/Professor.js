@@ -99,7 +99,12 @@ export default function Professor() {
   };
 
   const onInputChange = (e) => {
-    setProfessor({ ...professor, [e.target.name]: e.target.value });
+    setProfessor({ ...professor, [e.target.name]: e.target.value.toUpperCase() });
+  };
+
+  
+  const onEmailChange = (e) => {
+    setProfessor({ ...professor, [e.target.name]: e.target.value.toLowerCase() });
   };
 
   const loadProfessors = async () => {
@@ -263,7 +268,7 @@ export default function Professor() {
                   placeholder="Email"
                   name="email"
                   value={email || ""}
-                  onChange={(e) => onInputChange(e)}
+                  onChange={(e) => onEmailChange(e)}
                   required
                 />
               </div>
