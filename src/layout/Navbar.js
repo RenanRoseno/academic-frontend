@@ -58,11 +58,11 @@ export default function Navbar() {
                 </Link>
               </li>
 
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link" to={routes.SCORES}>
                   Notas
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

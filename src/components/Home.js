@@ -78,7 +78,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div class="row">
+      {/* <div class="row">
         <div class="col p-1 row-custom">
           <Link to={routes.SCORES}>
             <Button variant="btn btn-dark" className="btn-lg botao">
@@ -89,7 +89,7 @@ export default function Home() {
             </Button>
           </Link>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

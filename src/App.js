@@ -11,9 +11,12 @@ import Class from "./components/Class";
 import Score from "./components/Score";
 import * as routes from "./constants/routes";
 import Student from "./components/Student";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from "@mui/x-date-pickers";
 
 function App() {
   return (
+    <LocalizationProvider dateAdapter={AdapterMoment}>
     <div className="App">
       <Router>
         <Navbar />
@@ -38,6 +41,7 @@ function App() {
         </div>
       </footer>
     </div>
+    </LocalizationProvider>
   );
 }
 

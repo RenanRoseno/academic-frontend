@@ -14,6 +14,8 @@ import InputMask from "react-input-mask";
 import Form from "react-bootstrap/Form";
 import { showAlertSuccess, showAlertError } from "../layout/Alerts";
 import { ERROR, SUCCESS, SUCCESS_MESSAGE } from "../utils/messages";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 const columns = [
   {
@@ -56,12 +58,15 @@ export default function Professor() {
     cpf: "",
     register: "",
     phone: "",
+    disciplines: "",
   });
   const [selectedProfessor, setSelectedProfessor] = useState({});
-  const { name, email, cpf, register, phone } = professor;
+  const { name, email, cpf, register, phone, disciplines } = professor;
   const [num, setNum] = useState("");
   const [disable, setDisable] = useState(true);
   const [show, setShow] = useState(false);
+  const [disciplinesForm, setDisciplinesForm] = useState([]);
+  const [disciplinesBD, setDisciplinesBD] = useState([]);
 
   useEffect(() => {
     loadProfessors();
@@ -85,12 +90,14 @@ export default function Professor() {
 
   const handleShow = () => {
     clear();
-    setShow(true)
+    setShow(true);
+    loadDisciplines();
   };
 
   const handleShowEdit = () => {
     handleShow();
     loadUser();
+    loadDisciplines();
   };
 
   const handleNumChange = (event) => {
@@ -99,12 +106,17 @@ export default function Professor() {
   };
 
   const onInputChange = (e) => {
-    setProfessor({ ...professor, [e.target.name]: e.target.value.toUpperCase() });
+    setProfessor({
+      ...professor,
+      [e.target.name]: e.target.value.toUpperCase(),
+    });
   };
 
-  
   const onEmailChange = (e) => {
-    setProfessor({ ...professor, [e.target.name]: e.target.value.toLowerCase() });
+    setProfessor({
+      ...professor,
+      [e.target.name]: e.target.value.toLowerCase(),
+    });
   };
 
   const loadProfessors = async () => {
@@ -112,9 +124,15 @@ export default function Professor() {
     setProfessors(result.data);
   };
 
+  const loadDisciplines = async () => {
+    const result = await axios.get("http://localhost:8080/disciplines/");
+    setDisciplinesBD(result.data);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     professor.register = num;
+    professor.disciplines = disciplinesForm;
     if (selectedProfessor.id) {
       await axios
         .put(
@@ -171,6 +189,7 @@ export default function Professor() {
       `http://localhost:8080/professors/${selectedProfessor.id}`
     );
     setProfessor(result.data);
+    setDisciplinesForm(result.data.disciplines);
     setNum(result.data.register);
   };
 
@@ -299,6 +318,19 @@ export default function Professor() {
                   value={num || ""}
                   id="rg"
                   required
+                />
+              </div>
+              <div className="col-md-12">
+                <label htmlFor="rg">Disciplinas</label>
+                <Autocomplete
+                  id="tags-outlined"
+                  multiple
+                  options={disciplinesBD}
+                  getOptionLabel={(option) => option.name || ""}
+                  name="disciplines"
+                  value={disciplinesForm || []}
+                  onChange={(event, val) => setDisciplinesForm(val)}
+                  renderInput={(params) => <TextField {...params} />}
                 />
               </div>
             </div>
